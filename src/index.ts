@@ -16,6 +16,7 @@ const typeDefs = gql`
 
   type Query {
     getPosts: [Post]
+    getPost(id: ID!): Post
   }
   type Mutation {
     createPost(title: String!, content: String!, author: String!): Post
@@ -25,6 +26,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getPosts: async () => await Post.find(),
+    getPost: async (_: any, { id }: { id: string }) => await Post.findById(id),
   },
   Mutation: {
     createPost: async (_: any, { title, content, author }: { title: string, content: string, author: string }) => {
