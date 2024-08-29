@@ -1,21 +1,21 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import gql from 'graphql-tag';
+import { connectToMongoDB } from './database';
 
 
-// GraphQL 스키마 정의
 const typeDefs = gql`
   type Query {
     blog: String
   }
 `;
 
-// 리졸버 정의
 const resolvers = {
   Query: {
     blog: () => 'Welcome!',
   },
 };
+
 
 // 서버 시작
 async function startServer() {
@@ -29,6 +29,8 @@ async function startServer() {
   });
 
   console.log(`🚀 Server ready at ${url}`);
+
+  await connectToMongoDB();
 }
 
 startServer();
