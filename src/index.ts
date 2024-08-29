@@ -2,20 +2,28 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import gql from 'graphql-tag';
 import { connectToMongoDB } from './database';
+import { Post } from './models/post';
 
 
 const typeDefs = gql`
+  type Post {
+    id: ID!
+    title: String!
+    content: String!
+    author: String!
+    createdAt: String!
+  }
+
   type Query {
-    blog: String
+    getPosts: [Post]
   }
 `;
 
 const resolvers = {
   Query: {
-    blog: () => 'Welcome!',
+    getPosts: async () => await Post.find(),
   },
 };
-
 
 // 서버 시작
 async function startServer() {
