@@ -20,6 +20,7 @@ const typeDefs = gql`
   }
   type Mutation {
     createPost(title: String!, content: String!, author: String!): Post
+    deletePost(id: ID!): Post
   }
 `;
 
@@ -32,6 +33,10 @@ const resolvers = {
     createPost: async (_: any, { title, content, author }: { title: string, content: string, author: string }) => {
       const newPost = new Post({ title, content, author });
       return await newPost.save();
+    },
+    deletePost: async (_: any, { id }: { id: string }) => {
+        const deletedPost = await Post.findByIdAndDelete(id);
+        return deletedPost;
     },
   },
 };
