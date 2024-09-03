@@ -27,4 +27,8 @@ export const postTypeDefs = gql`
     updatePost(id: ID!, title: String, content: String, authorId: String): Post
     deletePost(id: ID!): Post
   }
+
+  type Subscription {
+    postCreated: Post
+  }  
 `;

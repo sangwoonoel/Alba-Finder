@@ -1,5 +1,7 @@
 import { Post } from '../../models/post';
 import { User } from '../../models/user';
+import pubsub from '../../utils/pubsub'
+import { POST_CREATED } from '../../utils/event'
 
 export const postResolvers = {
     Query: {
@@ -22,7 +24,9 @@ export const postResolvers = {
               isVerified: user.isVerified,
             },
           });
-          return await newPost.save();
+          await newPost.save();
+          pubsub.publish(POST_CREATED, { postCreated: newPost });
+          return newPost;
         },
       updatePost: async (_: any, { id, title, content, authorId }: { id: string, title?: string, content?: string, authorId?: string }) => {
           let author;
@@ -51,4 +55,9 @@ export const postResolvers = {
           return deletedPost;
       },
     },
+    Subscription: {
+        postCreated: {
+          subscribe: () => pubsub.asyncIterator([POST_CREATED]),
+        },
+    }
   };
