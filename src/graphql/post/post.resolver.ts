@@ -25,7 +25,8 @@ export const postResolvers = {
             },
           });
           await newPost.save();
-          pubsub.publish(POST_CREATED, { postCreated: newPost });
+          const postObject = newPost.toObject({ getters: true });
+          pubsub.publish(POST_CREATED, { postCreated: postObject });
           return newPost;
         },
       updatePost: async (_: any, { id, title, content, authorId }: { id: string, title?: string, content?: string, authorId?: string }) => {
