@@ -10,7 +10,9 @@ import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import cors from 'cors';
 
-export async function startServer(port: number) {
+const PORT = process.env.PORT || 4000;
+
+export async function startServer() {
     const schema = makeExecutableSchema({ typeDefs, resolvers });
 
     const app = express();
@@ -41,10 +43,12 @@ export async function startServer(port: number) {
     await server.start();
     app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
-    httpServer.listen(port, () => {
-        console.log(`Server is now running on http://localhost:${port}/graphql`);
-        console.log(`WebSocket server is running on ws://localhost:${port}/subscriptions`);
+    httpServer.listen(PORT, () => {
+        console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+        console.log(`WebSocket server is running on ws://localhost:${PORT}/subscriptions`);
     });
 
     await connectToMongoDB();
 }
+
+startServer();

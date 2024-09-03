@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app1:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/Alba-Finder
+      REDIS_URL: redis://redis:6379
+      PORT: 4000                     
+    depends_on:
+      - mongo
+      - redis
+    command: ts-node src/index.ts  
+
+  app2:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/Alba-Finder
+      REDIS_URL: redis://redis:6379
+      PORT: 5000                     
+    depends_on:
+      - mongo
+      - redis
+    command: ts-node src/index.ts 
+
+  mongo:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
